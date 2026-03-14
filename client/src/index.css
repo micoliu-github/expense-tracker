@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Finance app — clean, precise, professional with teal/green accent */
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+    --primary: 162 60% 35%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 20% 94%;
+    --secondary-foreground: 215 25% 25%;
+    --muted: 210 15% 93%;
+    --muted-foreground: 215 15% 50%;
+    --accent: 162 50% 92%;
+    --accent-foreground: 162 60% 25%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 162 60% 35%;
+    --radius: 0.5rem;
+
+    /* Sidebar */
+    --sidebar-background: 215 35% 12%;
+    --sidebar-foreground: 210 20% 85%;
+    --sidebar-primary: 162 60% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 30% 20%;
+    --sidebar-accent-foreground: 210 20% 90%;
+    --sidebar-border: 215 25% 18%;
+    --sidebar-ring: 162 60% 45%;
+
+    /* Chart colors */
+    --chart-1: 162 60% 38%;
+    --chart-2: 200 65% 45%;
+    --chart-3: 35 80% 55%;
+    --chart-4: 280 55% 55%;
+    --chart-5: 0 65% 55%;
+  }
+
+  .dark {
+    --background: 215 35% 9%;
+    --foreground: 210 20% 90%;
+    --card: 215 30% 12%;
+    --card-foreground: 210 20% 90%;
+    --popover: 215 30% 12%;
+    --popover-foreground: 210 20% 90%;
+    --primary: 162 55% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 18%;
+    --secondary-foreground: 210 20% 85%;
+    --muted: 215 25% 16%;
+    --muted-foreground: 215 15% 60%;
+    --accent: 215 25% 20%;
+    --accent-foreground: 162 50% 65%;
+    --destructive: 0 65% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 25% 20%;
+    --input: 215 25% 20%;
+    --ring: 162 55% 45%;
+
+    --sidebar-background: 215 40% 7%;
+    --sidebar-foreground: 210 20% 80%;
+    --sidebar-primary: 162 55% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 35% 14%;
+    --sidebar-accent-foreground: 210 20% 88%;
+    --sidebar-border: 215 30% 14%;
+    --sidebar-ring: 162 55% 50%;
+  }
+}
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', 'DM Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --font-serif: 'Inter', system-ui, sans-serif;
+  }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-muted; }
+  ::-webkit-scrollbar-thumb { @apply bg-muted-foreground/30 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-muted-foreground/50; }
+}
+
+/* Positive/negative value colors */
+.value-positive { @apply text-emerald-600 dark:text-emerald-400; }
+.value-negative { @apply text-red-600 dark:text-red-400; }
+.value-neutral  { @apply text-foreground; }
