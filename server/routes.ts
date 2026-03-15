@@ -107,6 +107,10 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
   });
 
   // ── Annual Big Spending ──────────────────────────────────────────────────────
+  // Must be before /:year so it isn't captured as a year param
+  app.get("/api/big-spending/all", async (_req, res) => {
+    res.json(await storage.getAllBigSpending());
+  });
   app.get("/api/big-spending/:year", async (req, res) => {
     res.json(await storage.getBigSpending(req.params.year));
   });

@@ -220,6 +220,10 @@ export default function Savings() {
   const { data: bigSpending = [] } = useQuery<AnnualBigSpending[]>({
     queryKey: ["/api/big-spending", selectedYear],
   });
+  // All big spending across all years — used for All Years table and chart
+  const { data: allBigSpending = [] } = useQuery<AnnualBigSpending[]>({
+    queryKey: ["/api/big-spending/all"],
+  });
 
   const saveMutation = useMutation({
     mutationFn: (data: InsertAnnualSavings) => apiRequest("PUT", `/api/annual-savings/${selectedYear}`, data),
@@ -259,6 +263,7 @@ export default function Savings() {
       apiRequest("POST", "/api/big-spending", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/big-spending", selectedYear] });
+      queryClient.invalidateQueries({ queryKey: ["/api/big-spending/all"] });
       setNewItemName("");
       setNewItemAmount("");
       toast({ title: "Big spending item added" });
@@ -270,6 +275,7 @@ export default function Savings() {
       apiRequest("PUT", `/api/big-spending/${id}`, { item, amount }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/big-spending", selectedYear] });
+      queryClient.invalidateQueries({ queryKey: ["/api/big-spending/all"] });
       toast({ title: "Item updated" });
     },
   });
@@ -278,6 +284,7 @@ export default function Savings() {
     mutationFn: (id: number) => apiRequest("DELETE", `/api/big-spending/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/big-spending", selectedYear] });
+      queryClient.invalidateQueries({ queryKey: ["/api/big-spending/all"] });
       toast({ title: "Item deleted" });
     },
   });
@@ -367,8 +374,8 @@ export default function Savings() {
       const ms = monthSummaries.find(ms => ms.month === m);
       return sum + (ms?.remainingPettyCash ?? 0);
     }, 0);
-    // Note: chart uses raw savings without big spending deductions for simplicity
-    const tot = s.thirteenthSalary + s.bonus + s.regularSaving + sPetty;
+    const sBigSpend = allBigSpending.filter(b => b.fiscalYear === fy).reduce((sum, b) => sum + b.amount, 0);
+    const tot = s.thirteenthSalary + s.bonus + s.regularSaving + sPetty - sBigSpend;
     // Compact label: "2025-2026" → "25/26"
     const [a, b] = fy.split("-");
     const label = `${a.slice(2)}/${b.slice(2)}`;
@@ -639,7 +646,8 @@ export default function Savings() {
                         const ms = monthSummaries.find(ms => ms.month === m);
                         return sum + (ms?.remainingPettyCash ?? 0);
                       }, 0);
-                      const tot = s.thirteenthSalary + s.bonus + s.regularSaving + sPetty;
+                      const sFyBigSpend = allBigSpending.filter(b => b.fiscalYear === s.fiscalYear).reduce((sum, b) => sum + b.amount, 0);
+                      const tot = s.thirteenthSalary + s.bonus + s.regularSaving + sPetty - sFyBigSpend;
                       return (
                         <tr key={s.fiscalYear} className="border-b last:border-0" data-testid={`row-savings-${s.fiscalYear}`}>
                           <td className="py-2 text-sm">{s.fiscalYear}</td>

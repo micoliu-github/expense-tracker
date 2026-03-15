@@ -232,8 +232,8 @@ function MonthPills({
         const canDelete = isPinned && !hasData;
 
         return (
-          <div key={m} className="group relative flex items-center">
-            {/* Pill button — navigate only, no trash inside */}
+          <div key={m} className="relative flex items-center">
+            {/* Pill button — navigate only */}
             <button
               onClick={() => onNavigate(m)}
               className={`pl-3 ${canDelete ? "pr-6" : "pr-3"} py-1 rounded-full text-xs font-medium transition-colors flex items-center gap-1 ${
@@ -250,16 +250,14 @@ function MonthPills({
                 }`} />
               )}
             </button>
-            {/* Trash — absolutely positioned OUTSIDE the pill button, pointer-events-none when hidden */}
+            {/* Trash — always visible when canDelete, works on touch and mouse */}
             {canDelete && (
               <button
                 onClick={e => { e.stopPropagation(); handleRemove(m); }}
-                className={`absolute right-0.5 top-1/2 -translate-y-1/2 rounded-full p-0.5
-                  pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100
-                  transition-opacity ${
+                className={`absolute right-0.5 top-1/2 -translate-y-1/2 rounded-full p-0.5 transition-colors ${
                   isActive
-                    ? "hover:bg-white/20 text-primary-foreground"
-                    : "hover:bg-destructive/20 text-destructive"
+                    ? "hover:bg-white/20 active:bg-white/30 text-primary-foreground/70"
+                    : "hover:bg-destructive/20 active:bg-destructive/30 text-destructive/60"
                 }`}
                 title={`Remove ${formatMonthLabel(m)}`}
                 data-testid={`button-remove-month-${m}`}
@@ -531,7 +529,7 @@ export default function MonthlyEntry() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleAddEntry} className="space-y-3" data-testid="form-add-expense">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <Label className="text-xs">Date</Label>
                   <Input

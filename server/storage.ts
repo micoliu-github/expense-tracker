@@ -128,6 +128,7 @@ export interface IStorage {
   getAllAnnualSavings(): Promise<AnnualSavings[]>;
   upsertAnnualSavings(s: InsertAnnualSavings & { id?: number }): Promise<AnnualSavings>;
   deleteAnnualSavings(fiscalYear: string): Promise<void>;
+  getAllBigSpending(): Promise<AnnualBigSpending[]>;
   getBigSpending(fiscalYear: string): Promise<AnnualBigSpending[]>;
   addBigSpending(item: InsertAnnualBigSpending): Promise<AnnualBigSpending>;
   updateBigSpending(id: number, patch: Partial<Pick<AnnualBigSpending, "item" | "amount">>): Promise<AnnualBigSpending>;
@@ -240,6 +241,9 @@ class SQLiteStorage implements IStorage {
     db.prepare("DELETE FROM annual_savings WHERE fiscal_year=?").run(fiscalYear);
   }
   // ── Annual Big Spending ──────────────────────────────────────────────────────
+  async getAllBigSpending(): Promise<AnnualBigSpending[]> {
+    return (db.prepare("SELECT * FROM annual_big_spending ORDER BY fiscal_year, id").all() as any[]).map(toAnnualBigSpending);
+  }
   async getBigSpending(fiscalYear: string): Promise<AnnualBigSpending[]> {
     return (db.prepare("SELECT * FROM annual_big_spending WHERE fiscal_year=? ORDER BY id").all(fiscalYear) as any[]).map(toAnnualBigSpending);
   }
